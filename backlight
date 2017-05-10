@@ -1,0 +1,73 @@
+#!/bin/sh
+
+##################################################################
+#
+
+# This script will toggle the backlight on or off to save power.  
+#
+
+# Written By:...........Sinucidal                                 
+#
+# Date:.................04-08-2017                                #
+
+# Hardware:.............SainSmart 20x4 character LCD on a         #
+
+#			Raspberry Pi B+ running Moebius OS        #
+
+# Restrictions:.........None. This code is open to the community
+  #
+#			to use and modify at will. If you make it #
+
+#			better please feel free to message me. It #
+
+#			It should work on other Raspberry Pi OSes
+ #
+#			and similar LCDs but was only built and   #
+
+#			tested on the hardware mentioned above.
+   #
+
+###################################################################
+
+help () {
+
+	echo -e "This program toggles the backlight on and off.\n"
+
+	echo -e "Usage:"
+	echo -e "   $0 -h"
+
+	echo -e "   $0 <STAT>\n"
+
+	echo -e "Options:"
+
+	echo -e "   -h		...displays the help page"
+
+	echo -e "   <STAT>	...whether the backlight should be on or off\n"
+	echo -e "Notes:"
+
+	echo -e "   Valid values for <STAT> are "on", "ON", "1", "off", "OFF" or "0""
+
+}
+
+if [ "$1" = "-h" ]; then					#  If the first parameter is "-h" then
+
+	help							#the help page is displayed
+
+	exit 0
+
+fi
+
+if [ "$1" = "on" -o "$1" = "ON" -o "$1" = "1" ]; then		#  Three possible values for on
+
+	i2cset -y 1 0x27 0x00 0x08				#  The respective CLI command
+
+elif [ "$1" = "off" -o "$1" = "OFF" -o "$1" = "0" ]; then	#  Three possible values for off
+
+	i2cset -y 1 0x27 0x00 0x00				#  The respective CLI command
+
+else
+	help "Parameter Error!"					#  Incase none of the recognised values are used
+
+	exit 1
+fi
+exit 0

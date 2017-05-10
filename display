@@ -1,0 +1,113 @@
+#!/bin/sh
+
+##################################################################
+#
+
+# This script sets the status of the screen, cursor, and whether  #
+
+# the cursor blinks.                                              
+#
+
+# Written By:...........Sinucidal                                 #
+
+# Date:.................04-08-2017                                #
+
+# Hardware:.............SainSmart 20x4 character LCD on a         #
+
+#			Raspberry Pi B+ running Moebius OS        #
+
+# Restrictions:.........None. This code is open to the community  #
+
+#			to use and modify at will. If you make it #
+
+#			better please feel free to message me. It #
+
+#			It should work on other Raspberry Pi OSes #
+
+#			and similar LCDs but was only built and   #
+
+#			tested on the hardware mentioned above.   
+#
+
+##################################################################
+#
+help () {
+
+	echo -e "$1\n"
+
+	echo -e "Turn the display and cursor on or off and toggle\n"
+
+	echo -e "cursor blnk.\n"
+
+	echo -e "Usage:"
+
+	echo -e "   $0 -h"
+
+	echo -e "   $0 <DISP> <CURS> <BLIN>\n"
+
+	echo -e "Options:"
+
+	echo -e "   -h		...display help screen"
+
+	echo -e "   <DISP>	...turn display on or off"
+
+	echo -e "   <CURS>	...turn cursor on or off"
+
+	echo -e "   <BLIN>	...toggle cursor blink\n"
+
+	echo -e "Notes:"
+
+	echo -e "   This script is meant to be called from another script where the"
+
+	echo -e "addresses can be defined and the i2cset program can be built from result\n"
+
+}
+
+if [ "$1" = "-h" ]; then					#  If the parameter is "-h" then
+
+	help							#  The help pages is displayed
+
+	exit 0
+
+fi
+
+if [ "$1" = "off" -a "$2" = "off" -a "$3" = "off" ]; then	#  Display=off, cursor=off, cursor-blink=off
+
+	echo -e "08\n"						#  The respective hex values
+
+elif [ "$1" = "off" -a "$2" = "off" -a "$3" = "on" ]; then	#  Display=off, cursor=off, cursor-blink=on
+
+	echo -e "09\n"						#  The respective hex values
+
+elif [ "$1" = "off" -a "$2" = "on" -a "$3" = "off" ]; then	#  Display=off, cursor=on, cursor-blink=off
+
+	echo -e "0A\n"						#  The respective hex values
+
+elif [ "$1" = "off" -a "$2" = "on" -a "$3" = "on" ]; then	#  Display=off, cursor=on, cursor-blink=on
+
+	echo -e "0B\n"						#  The respective hex values
+
+elif [ "$1" = "on" -a "$2" = "off" -a "$3" = "off" ]; then	#  Display=on, cursor=off, cursor-blink=off
+
+	echo -e "0C\n"						#  The respective hex values
+
+elif [ "$1" = "on" -a "$2" = "off" -a "$3" = "on" ]; then	#  Display=on, cursor=off, cursor-blink=on
+
+	echo -e "0D\n"						#  The respective hex values
+
+elif [ "$1" = "on" -a "$2" = "on" -a "$3" = "off" ]; then	#  Display=on, cursor=on, cursor-blink=off
+
+	echo -e "0E\n"						#  The respective hex values
+
+elif [ "$1" = "on" -a "$2" = "on" -a "$3" = "on" ]; then	#  Display=on, cursor=on, cursor-blink=on
+
+	echo -e "0F\n"						#  The respective hex values
+
+else
+	help "Parameter Error!"
+
+	exit 1
+
+fi
+
+exit 0

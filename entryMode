@@ -1,0 +1,90 @@
+#!/bin/sh
+
+##################################################################
+#
+
+# This script will affect how the cursor or screen will move      
+#
+# after each character entry.                                     
+#
+
+# Written By:...........Sinucidal                                 #
+
+# Date:.................04-08-2017
+                                #
+# Hardware:.............SainSmart 20x4 character LCD on a         #
+
+#			Raspberry Pi B+ running Moebius OS        #
+
+# Restrictions:.........None. This code is open to the community  #
+
+#			to use and modify at will. If you make it #
+
+#			better please feel free to message me. It #
+
+#			It should work on other Raspberry Pi OSes #
+
+#			and similar LCDs but was only built and   #
+
+#			tested on the hardware mentioned above.   #
+
+#
+##################################################################
+
+help () {
+
+	echo -e "This command sets whether the cursor increments or decrements and whether the screen will shift or not.\n"
+
+	echo -e "Usage:"
+
+	echo -e "   $0 -h"
+
+	echo -e "   $0 <CURS> <SHIF>\n"
+	echo -e "Options:"
+
+	echo -e "   -h		...displays the help guide"
+
+	echo -e "   <CURS>	...set cursor direction ("l" or "r")"
+
+	echo -e "   <SHIF>	...whether or no the screen will shift ("1" or "0")\n"
+
+	echo -e "Notes:"
+
+	echo -e "   This command is intended to be run from another command where addresses can be set"
+
+	echo -e "   and i2cset command can be built."
+
+}
+
+if [ "$1" = "-h" ]; then			#  If the parameter is "-h" then
+
+	help					#  Display the help page
+
+	exit 0
+
+fi
+
+if [ "$1" = "l" -a "$2" = "0" ]; then		#  Cursor will shift left, the screen will not shift
+
+	echo -e "06\n"
+
+elif [ "$1" = "l" -a "$2" = "1" ]; then		#  Cursor will shift left, the screen will shift
+
+	echo -e "07\n"
+
+elif [ "$1" = "r" -a "$2" = "0" ]; then		#  Cursor will shift right, the screen will not shift
+
+	echo -e "04\n"
+
+elif [ "$1" = "r" -a "$2" = "1" ]; then		#  Cursor will shift right, the screen will shift
+
+	echo -e "05\n"
+
+else
+	help "Parameter Error!"
+
+	exit 1
+
+fi
+
+exit 0

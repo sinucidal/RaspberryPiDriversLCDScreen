@@ -1,0 +1,88 @@
+#!/bin/sh
+
+##################################################################
+#
+
+# This script is the parse script that executes all other scripts.
+#
+# It calls the other scripts then declares them as a command or   #
+
+# data and finally sends the information to the LCD.
+              #
+
+# Written By:...........Sinucidal                                 #
+
+# Date:.................04-08-2017                                #
+
+# Hardware:.............SainSmart 20x4 character LCD on a         #
+
+#			Raspberry Pi B+ running Moebius OS        #
+
+# Restrictions:.........None. This code is open to the community  #
+
+#			to use and modify at will. If you make it #
+
+#			better please feel free to message me. It #
+
+#			It should work on other Raspberry Pi OSes
+ #
+#			and similar LCDs but was only built and   #
+
+#			tested on the hardware mentioned above.   #
+
+#
+##################################################################
+
+
+val=$1									#  the string of hex values
+
+cnt=${#val}								#  character count of string
+
+
+if [ "$2" = "cmd" ]; then						#  if the second parameter is "cmd"
+
+	ctrl1="c"
+
+	ctrl2="8"
+
+elif [ "$2" = "dat" ]; then						#  if the second parameter is "dat"
+
+	ctrl1="d"
+
+	ctrl2="9"
+
+else
+	echo -e "The second parameter is either not valid or missing."
+
+	exit 1
+
+fi
+
+
+i=0
+
+while [ $i -lt $cnt ]; do
+
+	hex=${val:$i:2}							#  split the string into pairs of hex values
+
+	i=$((i+2))
+
+	j=0
+
+	while [ $j -lt 2 ]; do
+
+		msg1=${hex:$j:1}$ctrl1					#  split the pairs and behind each character add the ctrl characters
+
+		msg2=${hex:$j:1}$ctrl2
+
+		j=$((j+1))
+
+		i2cset -y 1 0x27 0x00 0x$msg1				#  ouput the new messages into the command
+
+		i2cset -y 1 0x27 0x00 0x$msg2
+
+	done
+
+done
+
+exit 0

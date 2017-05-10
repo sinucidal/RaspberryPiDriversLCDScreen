@@ -1,0 +1,43 @@
+#!/bin/sh
+
+##################################################################
+#
+
+# This script will clear the screen and return the cursor to the  #
+
+# home position in the top left corner.                           
+#
+
+# Written By:...........Sinucidal                                 #
+
+# Date:.................04-08-2017                                #
+
+# Hardware:.............SainSmart 20x4 character LCD on a
+         #
+#			Raspberry Pi B+ running Moebius OS        #
+
+# Restrictions:.........None. This code is open to the community  #
+
+#			to use and modify at will. If you make it #
+
+#			better please feel free to message me. It #
+
+#			It should work on other Raspberry Pi OSes #
+
+#			and similar LCDs but was only built and   #
+
+#			tested on the hardware mentioned above.   #
+
+#
+##################################################################
+
+if [ $# -eq 0 ]; then							#  Make sure the command has no attached parameters
+
+	echo -e "02\n"							#  The hex code for command
+
+else
+	echo -e "Error: Please do not use any parameters with "home"\n"
+
+fi
+
+exit 0

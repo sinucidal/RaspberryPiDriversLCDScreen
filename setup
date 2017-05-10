@@ -1,0 +1,127 @@
+#!/bin/sh
+
+##################################################################
+#
+
+# This script will setup the LCD display. It may only be called   #
+# once each time the display is powered up. It sets the number of #
+
+# lines the display uses and the character font size.             
+#
+
+# Written By:...........Sinucidal                                 #
+
+# Date:.................04-08-2017                                #
+
+# Hardware:.............SainSmart 20x4 character LCD on a         #
+
+#			Raspberry Pi B+ running Moebius OS
+        #
+# Restrictions:.........None. This code is open to the community  #
+
+#			to use and modify at will. If you make it #
+
+#			better please feel free to message me. It #
+
+#			It should work on other Raspberry Pi OSes #
+
+#			and similar LCDs but was only built and   #
+
+#			tested on the hardware mentioned above.   #
+
+#
+##################################################################
+
+help () {
+
+	echo -e "$1\n"
+
+	echo -e "configure the LCD display.\n"
+
+	echo -e "Usage:"
+
+	echo -e "   $0 -h"
+
+	echo -e "   $0 <N_LINES> <FONT>\n"
+
+	echo -e "Options:"
+
+	echo -e "   -h..........Opens the help utility."
+
+	echo -e "   <N_LINES>...Number of lines on the display."
+
+	echo -e "   <FONT>......Size of the characters written.\n"
+
+	echo -e "Notes:"
+
+	echo -e "   This script is meant to be called from another script where the "
+
+	echo -e "   addresses can be defined and i2cset commands can be built."
+
+}
+
+print() {					# This function splits the final hex string into pairs and adds them to the output command
+
+	i=0
+
+	while [ $i -lt 12 ]; do			#  The hex string will have 12 characters
+
+		msg=${hex:$i:2}			#  Split the string into pairs of characters
+
+		i2cset -y 1 0x27 0x00 0x$msg	#  Concatenate the pairs to the command
+
+		i=$((i+1))
+
+	done
+
+}
+
+if [ "$1" = "-h" -o "$1" = "" ]; then		#  Help page called if "-h"
+
+	help
+
+	exit 0
+
+fi
+
+if [ "$1" = "1" -a "$2" = "5x8" ]; then		#  one line with 5x8 characters
+
+	hex="2C282C280C08"
+
+	print
+
+	exit 0
+
+elif [ "$1" = "1" -a "$2" = "5x10" ]; then	#  one line with 5x10 characters
+
+	hex="2C282C284C48"
+
+	print
+
+	exit 0
+
+elif [ "$1" = "2" -a "$2" = "5x8" ]; then	#  2 lines with 5x8 characters
+
+	hex="2C282C288C88"
+
+	print
+
+	exit 0
+
+elif [ "$1" = "2" -a "$2" = "5x10" ]; then	#  2 lines with 5x10 characters
+
+	hex="2C282C28CCC8"
+
+	print
+
+	exit 0
+
+else
+
+	echo -e "Parameter Error!"
+
+	exit 1
+
+fi
+
+exit 0

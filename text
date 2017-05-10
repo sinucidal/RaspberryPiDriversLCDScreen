@@ -1,0 +1,86 @@
+#!/bin/sh
+
+##################################################################
+#
+
+# Inputs user text as parameter and outputs the hex sttring       #
+# equivalent.                                                     
+#
+
+# Written By:...........Sinucidal                                 #
+
+# Date:.................04-08-2017                                #
+
+# Hardware:.............SainSmart 20x4 character LCD on a         #
+
+#			Raspberry Pi B+ running Moebius OS        #
+# Restrictions:.........None. This code is open to the community  #
+
+#			to use and modify at will. If you make it #
+
+#			better please feel free to message me. It #
+
+#			It should work on other Raspberry Pi OSes
+ #
+#			and similar LCDs but was only built and   #
+
+#			tested on the hardware mentioned above.   #
+
+#
+##################################################################
+
+txt=$1							#  the string is the parameter
+
+cnt=${#txt}						#  counts the number of characters in the string
+
+i=0
+
+while [ $i -lt $cnt ]; do
+
+	case "${txt:$i:1}" in				#  splits the string into individual characters
+		' ')
+
+			hex=20				#  the hex code for a space
+	
+		;;
+
+		'^')
+
+			esc=${txt:$i:3}			# if a "^" is used, an escape string of 3 chars is detected
+
+			case "$esc" in
+
+				'^dg')
+
+					hex=DF		#  the hex value for a degree symbol
+					i=$((i+2))	#  skip sequence to the end of escape string
+
+					;;
+
+				*)
+
+					hex=5E		#  if no valid escape string then just "^" is printed
+
+					;;
+
+			esac
+
+			;;
+
+		*)
+
+			hex=$(printf %2x \'${txt:$i:1})	#  the hex values of each character is printed
+
+		;;
+
+	esac
+
+	out=$out$hex					#  each hex value is assembled into a single output
+
+	i=$((i+1))
+
+done
+
+echo $out
+
+exit 0
